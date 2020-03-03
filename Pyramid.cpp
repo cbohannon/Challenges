@@ -1,44 +1,46 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
 
 int main()
 {
-    std::string letters{};
+    string Letters{};
 
-    std::cout << "Enter a string of letters so I can create a Letter Pyramid from it: ";
-    getline(std::cin, letters);
+    cout << "Enter a string of letters so I can create a Letter Pyramid from it: ";
+    getline(cin, Letters);
 
-    size_t num_letters = letters.length();
-
-    int position {0};
+    size_t LetterCount = Letters.length();
+    size_t Position {0};
 
     // for each letter in the string
-    for (char c: letters) {
-
-        size_t num_spaces = num_letters - position;
-        while (num_spaces > 0) {
-            std::cout << " ";
-            --num_spaces;
+    for (char CurrentLetter : Letters)
+    {
+        size_t SpacesCount = LetterCount - Position;
+        while (SpacesCount > 0)
+        {
+            cout << " ";
+            --SpacesCount;
         }
 
         // Display in order up to the current character
-        for (size_t j=0; j < position; j++) {
-            std::cout << letters.at(j);
+        for (size_t Index = 0; Index < Position; Index++)
+        {
+            cout << Letters.at(Index);
         }
 
         // Display the current 'center' character
-        std::cout << c;
+        cout << CurrentLetter;
 
         // Display the remaining characters in reverse order
-        for (int j=position-1; j >=0; --j) {
-            // You can use this line to get rid of the size_t vs int warning if you want
-            auto k = static_cast<size_t>(j);
-            std::cout << letters.at(k);
+        for (int Index = Position-1; Index >= 0; --Index)
+        {
+            auto CastedIndex = static_cast<size_t>(Index);
+            cout << Letters.at(CastedIndex);
         }
 
-        std::cout << std::endl; // Don't forget the end line
-        ++position;
+        cout << endl; // Don't forget the end line
+        ++Position;
     }
 
     return 0;
