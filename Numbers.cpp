@@ -7,9 +7,15 @@
 
 using namespace std;
 
-// TODO: Each option should be in a function
-// TODO: Don't exit program after a selection is run
-void SelectionProcessing(char UserChoice, vector<int> NumberList)
+// Function prototypes for user selection
+void PrintNumbers(const vector<int> &NumberList);
+void AddNumber();
+void CalculateMean(const vector<int> &NumberList);
+void SmallestNumber(vector<int> &NumberList);
+void LargestNumber(vector<int> &NumberList);
+void Quit();
+
+int SelectionProcessing(char UserChoice, vector<int> NumberList)
 {      
     // I'll create a special rule to satisfy the requirement for an empty list in 'P', 'M', 'S', and 'L'
     // NumberList.at(0) = 1; // Debug line
@@ -19,79 +25,23 @@ void SelectionProcessing(char UserChoice, vector<int> NumberList)
         NumberList.clear();
     }
     
-    if (UserChoice == 'P')
+    switch(UserChoice)
     {
-        if (NumberList.empty())
-        {
-            cout << "[] - the list is empty." << endl;
-            return;
-        }
-        
-        cout << "[ ";
-        for (int num :  NumberList)
-        {
-            cout << num << " ";
-        }
-        cout << "]" << endl;        
-        return;
+        case 'P': PrintNumbers(NumberList);
+            break;
+        case 'A': AddNumber();
+            break;
+        case 'M': CalculateMean(NumberList);
+            break;
+        case 'S': SmallestNumber(NumberList);
+            break;
+        case 'L': LargestNumber(NumberList);
+            break;
+        default: Quit();
+            return -1;
     }
-    
-    if (UserChoice == 'A')
-    {
-        cout << "Please add a number between 1 - 20 to the list: ";
-        // TODO: Make sure the user adds a number between 1 - 20
-        unsigned int AddedNumber {0};
-        cin >> AddedNumber;
-        cout << AddedNumber << " has been added." << endl;        
-        return;
-    }
-    
-    if (UserChoice == 'M')
-    {
-        if (NumberList.empty())
-        {
-            cout << "Unable to calculate the mean - no data." << endl;
-            return;
-        }
-        
-        float Mean = accumulate(NumberList.begin(), NumberList.end(), 0.0 / NumberList.size());
-        cout << "The mean is: " << Mean << endl;        
-        return;
-    }
-    
-    if (UserChoice == 'S')
-    {
-        if (NumberList.empty())
-        {
-            cout << "Unable to determine the smallest number - list is empty.";
-            return;
-        }
-        
-        sort(NumberList.begin(), NumberList.end());
-        cout << "The smallest number in the list is: " << NumberList.at(0) << endl;        
-        return;
-    }
-    
-    if (UserChoice == 'L')
-    {
-        if (NumberList.empty())
-        {
-            cout << "Unable to determine the largest number - list is empty.";
-            return;
-        }
-        
-        sort(NumberList.begin(), NumberList.end(), greater<int>());
-        cout << "The largest number in the list is: " << NumberList.at(0) << endl;        
-        return;
-    }
-    
-    if (UserChoice == 'Q')
-    {
-        cout << "Goodbye!" << endl;
-        return;
-    }
-    
-    return;
+
+    return 0;
 }
 
 vector<int> GenerateNumbers()
@@ -123,12 +73,13 @@ char SetupOptions()
     
     char Selected {};
     cin >> Selected;    
+    
     return Selected;
 }
 
 bool ValidateChoice(char Choice)
 {
-    vector<char> ValidCharacters { 'P', 'A', 'M', 'S', 'L', 'Q' };
+    const vector<char> ValidCharacters { 'P', 'A', 'M', 'S', 'L', 'Q' };
     
     // Check for valid choice
     if (find(ValidCharacters.begin(), ValidCharacters.end(), Choice) != ValidCharacters.end())
@@ -156,8 +107,81 @@ int main()
     // Get some random numbers
     vector<int> NumberList = GenerateNumbers();
 
-    // This is where all the work is done
-    SelectionProcessing(UserChoice, NumberList);
+    if (SelectionProcessing(UserChoice, NumberList) != -1)
+    {
+        main();
+    }
     
     return 0;
+}
+
+void PrintNumbers(const vector<int> &NumberList)
+{
+    if (NumberList.empty())
+    {
+        cout << "[] - the list is empty." << endl;
+        return;
+    }
+    
+    cout << "[ ";
+    for (int num :  NumberList)
+    {
+        cout << num << " ";
+    }
+    cout << "]" << endl;
+}
+
+void AddNumber()
+{
+    cout << "Please add a number between 1 - 20 to the list: ";
+    unsigned int AddedNumber {0};
+    cin >> AddedNumber;
+    
+    if (AddedNumber < 1 || AddedNumber > 20)
+    {
+        AddNumber();
+    }
+    
+    cout << AddedNumber << " has been added." << endl;        
+}
+
+void CalculateMean(const vector<int> &NumberList)
+{
+    if (NumberList.empty())
+    {
+        cout << "Unable to calculate the mean - no data." << endl;
+        return;
+    }
+    
+    float Mean = accumulate(NumberList.begin(), NumberList.end(), 0.0 / NumberList.size());
+    cout << "The mean is: " << Mean << endl;        
+}
+
+void SmallestNumber(vector<int> &NumberList)
+{
+    if (NumberList.empty())
+    {
+        cout << "Unable to determine the smallest number - list is empty.";
+        return;
+    }
+    
+    sort(NumberList.begin(), NumberList.end());
+    cout << "The smallest number in the list is: " << NumberList.at(0) << endl;        
+}
+
+void LargestNumber(vector<int> &NumberList)
+{
+    if (NumberList.empty())
+    {
+        cout << "Unable to determine the largest number - list is empty.";
+        return;
+    }
+    
+    sort(NumberList.begin(), NumberList.end(), greater<int>());
+    cout << "The largest number in the list is: " << NumberList.at(0) << endl;        
+}
+
+void Quit()
+{
+    cout << "Goodbye!" << endl;
 }
