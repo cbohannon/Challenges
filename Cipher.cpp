@@ -7,7 +7,7 @@ int main()
 {
     const string Alphabet {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.?!'"};
     const string Key {"?XZNLWEBGJHQDYVTKFUOMPCIASR!xznlwebgjhqdyvtkfuompciasr'."};
-    const string Space = " ";
+    const string Space {" "};
     string SecretPhrase {};
     string CipherPhrase {};
     string FinalPhrase {};
